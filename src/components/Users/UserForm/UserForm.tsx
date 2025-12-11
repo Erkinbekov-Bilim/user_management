@@ -55,6 +55,7 @@ const UserForm: React.FC<IUserFormProps> = ({ addUser }) => {
     ) {
       toast.error('User name and email must be less than 15 characters');
     } else {
+      toast.success('User added successfully');
       addUser({ ...form, id: generateId() });
       setForm({ name: '', email: '', isActive: false, role: '' });
       setChecked(false);
