@@ -11,8 +11,10 @@ const UserItem: React.FC<IUserItemProps> = ({ user }) => {
 
   return (
     <div
-      className={`user-item p-4 rounded-5 text-white mx-auto border-3 ${
-        user.isActive ? 'border border-success active-user' : 'border border-warning inactive-user'
+      className={`user-item p-4 rounded-5 text-white border-3 w-100 me-4 ${
+        user.isActive
+          ? 'border border-success active-user'
+          : 'border border-warning inactive-user'
       }`}
     >
       <div className="field d-flex flex-row">

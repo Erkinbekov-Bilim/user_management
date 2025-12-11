@@ -5,22 +5,23 @@
 .users-content {
   overflow-y: auto;
   height: 700px;
+  overflow-x: hidden;
 }
 
 .users-content::-webkit-scrollbar {
-  width: 3px;
+  width: 5px;
 }
 
 .users-content::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #cfdee2;
 }
 
 .users-content::-webkit-scrollbar-thumb {
-  background: #d84fb6;
+  background: #443196;
 }
 
 .users-content::-webkit-scrollbar-thumb:hover {
-  background: #d84fb6;
+  background: #443196;
 }
 
 .empty-text {

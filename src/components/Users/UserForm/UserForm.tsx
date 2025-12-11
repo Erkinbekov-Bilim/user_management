@@ -4,6 +4,7 @@ import './UserForm.css';
 import { useState } from 'react';
 import type { IUser, IUserFormMutation } from '../../../types';
 import generateId from '../../../utils/generateId';
+import { toast } from 'react-toastify';
 
 interface IUserFormProps {
   addUser: (user: IUser) => void;
@@ -40,10 +41,24 @@ const UserForm: React.FC<IUserFormProps> = ({ addUser }) => {
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    addUser({ ...form, id: generateId() });
-
-    setForm({ name: '', email: '', isActive: false, role: '' });
-    setChecked(false);
+    if (
+      form.name.trim().length === 0 ||
+      form.email.trim().length === 0 ||
+      form.role === ''
+    ) {
+      toast.error("User name, email and role can't be empty");
+    } else if (!form.email.includes('@gmail.com')) {
+      toast.error('User email must be @gmail.com');
+    } else if (
+      form.email.trim().slice(0, form.email.indexOf('@')).length > 15 ||
+      form.name.trim().length > 15
+    ) {
+      toast.error('User name and email must be less than 15 characters');
+    } else {
+      addUser({ ...form, id: generateId() });
+      setForm({ name: '', email: '', isActive: false, role: '' });
+      setChecked(false);
+    }
   };
 
   return (
@@ -58,6 +73,7 @@ const UserForm: React.FC<IUserFormProps> = ({ addUser }) => {
               className="px-4 py-3 border border-dark rounded-5 w-100"
               onChange={onChange}
               value={form.name}
+              required
             />
           </label>
 
@@ -69,6 +85,7 @@ const UserForm: React.FC<IUserFormProps> = ({ addUser }) => {
               className="px-4 py-3 border border-dark rounded-5 w-100"
               onChange={onChange}
               value={form.email}
+              required
             />
           </label>
 
@@ -90,6 +107,7 @@ const UserForm: React.FC<IUserFormProps> = ({ addUser }) => {
             className="select-role form-select rounded-5 w-100 px-4 py-3 "
             onChange={onChange}
             value={form.role}
+            required
           >
             <option value="" selected disabled>
               Choose role
