@@ -1,12 +1,54 @@
+import type React from 'react';
 import Button from '../../../UI/Button/Button';
 import './UserForm.css';
+import { useState } from 'react';
+import type { IUser, IUserFormMutation } from '../../../types';
+import generateId from '../../../utils/generateId';
 
-const UserForm = () => {
+interface IUserFormProps {
+  addUser: (user: IUser) => void;
+}
+
+const UserForm: React.FC<IUserFormProps> = ({ addUser }) => {
   const roles = ['user', 'editor', 'admin'];
+
+  const [checked, setChecked] = useState<boolean>(false);
+
+  const [form, setForm] = useState<IUserFormMutation>({
+    name: '',
+    email: '',
+    isActive: false,
+    role: '',
+  });
+
+  const onChangeCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
+
+  const onChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = event.target;
+
+    setForm((prevState) => ({
+      ...prevState,
+      [name]: value,
+      isActive: checked,
+    }));
+  };
+
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    addUser({ ...form, id: generateId() });
+
+    setForm({ name: '', email: '', isActive: false, role: '' });
+    setChecked(false);
+  };
 
   return (
     <div className="w-50">
-      <form>
+      <form onSubmit={onSubmit}>
         <div className="d-flex flex-column align-items-start gap-4 w-50">
           <label className="w-100">
             <input
@@ -14,6 +56,8 @@ const UserForm = () => {
               name="name"
               placeholder="User name"
               className="px-4 py-3 border border-dark rounded-5 w-100"
+              onChange={onChange}
+              value={form.name}
             />
           </label>
 
@@ -23,16 +67,19 @@ const UserForm = () => {
               name="email"
               placeholder="User email"
               className="px-4 py-3 border border-dark rounded-5 w-100"
+              onChange={onChange}
+              value={form.email}
             />
           </label>
 
-          <label className="checkbox-label bg-white px-4 py-3 rounded-5 w-100 d-flex flex-lg-row justify-content-between ">
+          <label className="checkbox-label bg-white px-4 py-3 rounded-5 w-100 d-flex flex-lg-row justify-content-between">
             Is Active User?
             <input
               type="checkbox"
-              name="isActive"
               title="is active?"
               className="ms-3 cursor-pointer"
+              checked={checked}
+              onChange={onChangeCheck}
             />
           </label>
 
@@ -40,7 +87,9 @@ const UserForm = () => {
             name="role"
             id="role"
             title="choose role"
-            className="form-select rounded-5 w-100 px-4 py-3 pe-auto cursor-pointer"
+            className="select-role form-select rounded-5 w-100 px-4 py-3 "
+            onChange={onChange}
+            value={form.role}
           >
             <option value="" selected disabled>
               Choose role
