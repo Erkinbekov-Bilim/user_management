@@ -47,9 +47,9 @@ const UserForm: React.FC<IUserFormProps> = ({ addUser }) => {
   };
 
   return (
-    <div className="w-50">
+    <div className="form-block">
       <form onSubmit={onSubmit}>
-        <div className="d-flex flex-column align-items-start gap-4 w-50">
+        <div className="d-flex flex-column align-items-start gap-4 w-100">
           <label className="w-100">
             <input
               type="text"
